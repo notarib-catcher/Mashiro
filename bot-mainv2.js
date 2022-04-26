@@ -75,7 +75,9 @@ async function onReady(){
     let statusfetchSuccess = true
     let parsedState = {}
     if (currentState == false){
-        let errorEmbed = new discord.MessageEmbed().addField('Error while fetching status!','Please report this to <@'+ribDiscordID+'>').setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
+        let errorEmbed = new discord.MessageEmbed()
+                        .addField('Error while fetching status!','Please report this to <@'+ribDiscordID+'>')
+                        .setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
         logsMCChannel.send(errorEmbed)
     }
     else{
@@ -84,7 +86,12 @@ async function onReady(){
     statusfetchSuccess = true
     initendTimestamp = new Date().getTime()
     let startupTimeTaken =  initendTimestamp - startupTimestamp 
-    let startupEmbed = new discord.MessageEmbed().setColor(0x0099ff).setTitle('Hello!').setAuthor('Startup complete','https://cdn.dribbble.com/users/1092738/screenshots/4210641/fire_still_2x.gif?compress=1&resize=400x300').setFooter('Mashiro Engine v2.0').addField('All modules loaded.','Time taken: ' + startupTimeTaken + ' ms').setTimestamp(new Date()).addField((currentState != false)?'Server status':'Error while fetching status!', (currentState != false)?'Server is currently - '+parsedState.status:'Please report this to <@'+ribDiscordID+'>')
+    let startupEmbed = new discord.MessageEmbed().setColor(0x0099ff).setTitle('Hello!')
+                        .setAuthor('Startup complete','https://cdn.dribbble.com/users/1092738/screenshots/4210641/fire_still_2x.gif?compress=1&resize=400x300')
+                        .setFooter('Mashiro Engine v2.0')
+                        .addField('All modules loaded.','Time taken: ' + startupTimeTaken + ' ms')
+                        .setTimestamp(new Date())
+                        .addField((currentState != false)?'Server status':'Error while fetching status!', (currentState != false)?'Server is currently - '+parsedState.status:'Please report this to <@'+ribDiscordID+'>')
     mainMCChannel.send(startupEmbed)
     console.log('\n')
     console.log('done')
@@ -313,16 +320,25 @@ async function statusCommand_Executor(message, parsedMsg, authorised){
         let currentState = await fetchServerStatus(false)
         let parsedState = {}
         if (currentState == false){
-            let errorEmbed = new discord.MessageEmbed().addField('Error while fetching status!','Please report this to <@'+ribDiscordID+'>').setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
+            let errorEmbed = new discord.MessageEmbed()
+                            .addField('Error while fetching status!','Please report this to <@'+ribDiscordID+'>')
+                            .setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
             logsMCChannel.send(errorEmbed)
             message.react('❌')
         }
         else {
             parsedState = parseCurrentState(currentState)
-            let stateEmbed = new discord.MessageEmbed().setColor(parsedState.color).setFooter('Mashiro Engine v2.0').setTimestamp(new Date()).addField('Status check','Server is currently - '+parsedState.status)
+            let stateEmbed = new discord.MessageEmbed()
+                            .setColor(parsedState.color)
+                            .setFooter('Mashiro Engine v2.0')
+                            .setTimestamp(new Date())
+                            .addField('Status check','Server is currently - '+parsedState.status)
             message.channel.send(stateEmbed)
         }
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('Status command was run:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+        let logEmbed = new discord.MessageEmbed()
+                            .setTimestamp(new Date()).addField('Status command was run:','Click [here]('+message.url+') to jump to message.')
+                            .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                            .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
         logsMCChannel.send(logEmbed)
     }
 }
@@ -335,14 +351,23 @@ async function reloadCommand_Executor(message, parsedMsg, authorised){
         await reloadDiscordServices()
         let reloadEnd = new Date().getTime()
         let reloadTime = reloadEnd - reloadStart
-        let responseEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('Reload complete!', 'Took '+reloadTime+'ms.').setColor(786176).setFooter('Mashiro Engine v2.0')
+        let responseEmbed = new discord.MessageEmbed()
+                            .setTimestamp(new Date()).addField('Reload complete!', 'Took '+reloadTime+'ms.')
+                            .setColor(786176).setFooter('Mashiro Engine v2.0')
         message.channel.send(responseEmbed)
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('Bot reloaded!','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
-        logsMCChannel.send(logEmbed)
+        let logEmbed = new discord.MessageEmbed()
+                      .setTimestamp(new Date()).addField('Bot reloaded!','Click [here]('+message.url+') to jump to message.')
+                      .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                      .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}));
+        logsMCChannel.send(logEmbed);
         message.reactions.removeAll().then(message.react('✅'))
     }
     else{
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(16254496)
+        let logEmbed = new discord.MessageEmbed()
+                       .setTimestamp(new Date())
+                       .addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.')
+                       .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                       .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(16254496)
         logsMCChannel.send(logEmbed)
         message.react('❌')
     }
@@ -357,19 +382,29 @@ async function commandCommand_Executor(message, parsedMsg, authorised){
         try{
             await HTTPPanelRequest.post('https://mc.bloom.host/api/client/servers/20bbfc96/command',request)
             message.reactions.removeAll().then(message.react('✅'))
-            let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('MC Command sent!','Click [here]('+message.url+') to jump to message.').addField('Content:',parsedMsg.body).setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(786176)
+            let logEmbed = new discord.MessageEmbed()
+                          .setTimestamp(new Date()).addField('MC Command sent!','Click [here]('+message.url+') to jump to message.')
+                          .addField('Content:',parsedMsg.body).setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                          .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                          .setColor(786176)
             logsMCChannel.send(logEmbed)
         }
         catch(error){
             if (parsedMsg.body == ''){
                 console.log('[UNIX TIME:'+new Date().getTime() +']: Error in commandCommand_Executor():\n\n' + error + '\n\n[--END--]\n\n')
                 message.reply(' specify a command to send.')
-                let errorEmbed = new discord.MessageEmbed().addField('Error while sending command!','Empty command field!\nIf this isn\'t true, please report this to <@'+ribDiscordID+'>').setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
+                let errorEmbed = new discord.MessageEmbed()
+                                .addField('Error while sending command!','Empty command field!\nIf this isn\'t true, please report this to <@'+ribDiscordID+'>')
+                                .setFooter('Mashiro Engine v2.0 • More information in the console')
+                                .setTimestamp(new Date())
                 logsMCChannel.send(errorEmbed)
             }
             else{
                 console.log('[UNIX TIME:'+new Date().getTime() +']: Error in commandCommand_Executor():\n\n' + error + '\n\n[--END--]\n\n')
-                let errorEmbed = new discord.MessageEmbed().addField('Error while sending command!','Please report this to <@'+ribDiscordID+'>').setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
+                let errorEmbed = new discord.MessageEmbed()
+                                 .addField('Error while sending command!','Please report this to <@'+ribDiscordID+'>')
+                                 .setFooter('Mashiro Engine v2.0 • More information in the console')
+                                 .setTimestamp(new Date())
                 logsMCChannel.send(errorEmbed)
             }
             message.reactions.removeAll().then(message.react('❌'))
@@ -377,7 +412,12 @@ async function commandCommand_Executor(message, parsedMsg, authorised){
 
     }
     else{
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(16254496)
+        let logEmbed = new discord.MessageEmbed()
+                       .setTimestamp(new Date())
+                       .addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.')
+                       .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                       .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                       .setColor(16254496)
         logsMCChannel.send(logEmbed)
     }
 }
@@ -390,19 +430,33 @@ async function powerCommand_Executor(message, parsedMsg, authorised){
         }
         try{
             await HTTPPanelRequest.post('https://mc.bloom.host/api/client/servers/20bbfc96/power',request)
-            let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('['+parsedMsg.command+'] MC Power action sent!','Click [here]('+message.url+') to jump to message.').addField('Reason:',(parsedMsg.body == '')?'None specified.':parsedMsg.body).setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(786176)
+            let logEmbed = new discord.MessageEmbed()
+                           .setTimestamp(new Date())
+                           .addField('['+parsedMsg.command+'] MC Power action sent!','Click [here]('+message.url+') to jump to message.')
+                           .addField('Reason:',(parsedMsg.body == '')?'None specified.':parsedMsg.body)
+                           .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                           .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                           .setColor(786176)
             logsMCChannel.send(logEmbed)
             message.reactions.removeAll().then(message.react('✅'))
         }
         catch(error){
             console.log('[UNIX TIME:'+new Date().getTime() +']: Error in powerCommand_Executor():\n\n' + error + '\n\n[--END--]\n\n')
-            let errorEmbed = new discord.MessageEmbed().addField('Error while sending power action!','Please report this to <@'+ribDiscordID+'>').setFooter('Mashiro Engine v2.0 • More information in the console').setTimestamp(new Date())
+            let errorEmbed = new discord.MessageEmbed()
+                             .addField('Error while sending power action!','Please report this to <@'+ribDiscordID+'>')
+                             .setFooter('Mashiro Engine v2.0 • More information in the console')
+                             .setTimestamp(new Date())
             logsMCChannel.send(errorEmbed)
             message.reactions.removeAll().then(message.react('❌'))
         }
     }
     else{
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(16254496)
+        let logEmbed = new discord.MessageEmbed()
+                       .setTimestamp(new Date())
+                       .addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.')
+                       .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                       .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                       .setColor(16254496)
         logsMCChannel.send(logEmbed)
         message.reactions.removeAll().then(message.react('❌'))
     }
@@ -412,13 +466,14 @@ async function pingCommand_Executor(message, parsedMsg, authorised){
     try{
     
         let pingEmbed = new discord.MessageEmbed()
-        .addField('Pong!','One-way ping took ' + (new Date().getTime() - message.createdTimestamp)+'ms.')
-        .setFooter('Mashiro Engine v2.0')
-        .setColor(786176)
-        .setTimestamp(new Date())
+                        .addField('Pong!','One-way ping took ' + (new Date().getTime() - message.createdTimestamp)+'ms.')
+                        .setFooter('Mashiro Engine v2.0')
+                        .setColor(786176)
+                        .setTimestamp(new Date())
 
         message.channel.send(pingEmbed)
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('Ping command was run:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+        let logEmbed = new discord.MessageEmbed()
+                       .setTimestamp(new Date()).addField('Ping command was run:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
         logsMCChannel.send(logEmbed)
     }
     catch(error){
@@ -473,19 +528,33 @@ async function trackCommand_Executor(message, parsedMsg, authorised){
                     messageID: messageObjectForTesting.id
                 }
                 trackedMsgs.push(trackObject)
-                let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('Tracker added','Click [here]('+messageObjectForTesting.url+') to jump to tracker.').addField('Command message:','Click [here]('+message.url+') to jump to command.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                let logEmbed = new discord.MessageEmbed()
+                               .setTimestamp(new Date())
+                               .addField('Tracker added','Click [here]('+messageObjectForTesting.url+') to jump to tracker.')
+                               .addField('Command message:','Click [here]('+message.url+') to jump to command.')
+                               .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                               .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
                 logsMSGChannel.send(logEmbed)
                 console.log('[UNIX TIME:'+new Date().getTime() +']:\n\nTrack created by '+message.author.id+' on '+parsedMsg.body+'.\n\n[--END--]\n\n')
             }
             else{
                 message.react('❌')
                 message.reply('No message found with that ID in this channel.')
-                let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('Tracker not added (404):','Click [here]('+message.url+') to jump to command.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                let logEmbed = new discord.MessageEmbed()
+                               .setTimestamp(new Date())
+                               .addField('Tracker not added (404):','Click [here]('+message.url+') to jump to command.')
+                               .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                               .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
                 logsMSGChannel.send(logEmbed)
             }
         }
         else{
-        let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(16254496)
+        let logEmbed = new discord.MessageEmbed()
+                       .setTimestamp(new Date())
+                       .addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.')
+                       .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                       .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                       .setColor(16254496)
         logsMSGChannel.send(logEmbed)
         message.react('❌')
         }
@@ -506,11 +575,20 @@ async function trackResetCommand_Executor(message, parsedMsg, authorised){
         if(authorised){
             trackedMsgs = [] //empty list of tracked message ids
             message.react('✅')
-            let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('All trackers have been reset!','Click [here]('+message.url+') to jump to command.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+            let logEmbed = new discord.MessageEmbed()
+                           .setTimestamp(new Date())
+                           .addField('All trackers have been reset!','Click [here]('+message.url+') to jump to command.')
+                           .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                           .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
             logsMSGChannel.send(logEmbed)
         }
         else{
-            let logEmbed = new discord.MessageEmbed().setTimestamp(new Date()).addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.').setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id).setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256})).setColor(16254496)
+            let logEmbed = new discord.MessageEmbed()
+                           .setTimestamp(new Date())
+                           .addField('['+parsedMsg.command + '] No permissions error:','Click [here]('+message.url+') to jump to message.')
+                           .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
+                           .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
+                           .setColor(16254496)
             logsMSGChannel.send(logEmbed)
             message.react('❌')
         }

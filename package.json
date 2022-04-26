@@ -1,0 +1,17 @@
+{
+    "name": "night-watchman",
+    "version": "2.1.0",
+    "description": "Managing the gamenight server",
+    "main": "bot-mainv2.js",
+    "author": "ribcatcher#5378",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "bufferutil": "^4.0.3",
+        "discord-command-parser": "^1.5.3",
+        "discord.js": "^12.5.1",
+        "dotenv": "^8.2.0",
+        "node.js": "0.0.1-security",
+        "utf-8-validate": "^5.0.4",
+        "yaml": "^1.10.2"
+    }
+}

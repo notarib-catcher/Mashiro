@@ -269,7 +269,7 @@ async function messageHandler(message){
         commandCommand_Executor(message, parsedMsg, authorised)
     }
     if(parsedMsg.command == 'restart' || parsedMsg.command == 'start' || parsedMsg.command == 'stop' || parsedMsg.command == 'kill'){
-        let authorised = checkPerms(message, parsedMsg)
+        let authorised = checkPerms(message, parsedMsg, 'power')
         powerCommand_Executor(message, parsedMsg, authorised)
     }
     if(parsedMsg.command == 'ping'){
@@ -336,7 +336,8 @@ async function statusCommand_Executor(message, parsedMsg, authorised){
             message.channel.send(stateEmbed)
         }
         let logEmbed = new discord.MessageEmbed()
-                            .setTimestamp(new Date()).addField('Status command was run:','Click [here]('+message.url+') to jump to message.')
+                            .setTimestamp(new Date())
+                            .addField('Status command was run:','Click [here]('+message.url+') to jump to message.')
                             .setFooter('Mashiro Engine v2.0 • Sender\'s id was '+message.author.id)
                             .setAuthor(message.author.username,message.author.displayAvatarURL({dynamic:true,size:256}))
         logsMCChannel.send(logEmbed)

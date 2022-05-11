@@ -57,6 +57,11 @@ bot.login(process.env.DISCORD_BOT_TOKEN)
 //Discord connection established
 bot.on('ready', async () => {onReady()})
 
+async function GetGuildMember(userID){
+    await bot.guilds.cache.get(process.env.DISCORD_GID).members.fetch(userID)
+    return bot.guilds.cache.get(process.env.DISCORD_GID).members.cache.get(userID)
+}
+
 async function onReady(){
     //set the status for swag reasons
     bot.user.setActivity("mc.imakami.ml", { //depression noises
@@ -229,15 +234,17 @@ console.log('[UNIX TIME:'+new Date().getTime() +']: Emoji reaction removed event
 }
 }
 }
+*/
 
 //End reaction log special functions
 async function suggestionCheck(message){
     try{
+        let CurrentGMember = await GetGuildMember(message.author.id)
         if (message.channel.id == process.env.SUGGESTION_CHANNEL_ID && message.content.toLowerCase().startsWith('[s]')){
-            message.react('<:approve:865208398504919040>').then(message.react('<:deny:865208398333345814>'))
+            message.react('<:accept:913689460087083028>').then(message.react('<:denied:913689460082892820>'))
             return true
         }
-        else if ((message.channel.id == process.env.SUGGESTION_CHANNEL_ID && message.content.toLowerCase().startsWith('[a]')) || message.member.roles.cache.some(role => role.name === 'Immunity') || message.member.roles.cache.some(role => role.name === 'Bots')){
+        else if ((message.channel.id == process.env.SUGGESTION_CHANNEL_ID && message.content.toLowerCase().startsWith('[a]')) || CurrentGMember.roles.resolve(process.env.DISCORD_MOD_ROLE) || CurrentGMember.roles.resolve(process.env.SERVER_MOD_ROLE) || CurrentGMember.roles.resolve(process.env.BOTS)){
             return false
         }
          else if(message.channel.id == process.env.SUGGESTION_CHANNEL_ID){
@@ -251,35 +258,36 @@ async function suggestionCheck(message){
         return false
     } 
 }
-*/
+
 //COugh I mean this is the message handler over here
 async function messageHandler(message){
     let parsedMsg = parse(message,'~')
     
     if(parsedMsg.command == 'status'){
         let authorised = true  //anyone can run the status command!
-        statusCommand_Executor(message,parsedMsg,authorised)
+        statusCommand_Executor(message,parsedMsg,authorised).catch((error) => console.log(error))
     }
     if(parsedMsg.command == 'reload'){
         let authorised = checkPerms(message, parsedMsg)
-        reloadCommand_Executor(message, parsedMsg, authorised)
+        reloadCommand_Executor(message, parsedMsg, authorised).catch((error) => console.log(error))
     }
     if(parsedMsg.command == 'command'){
         let authorised = checkPerms(message, parsedMsg)
-        commandCommand_Executor(message, parsedMsg, authorised)
+        commandCommand_Executor(message, parsedMsg, authorised).catch((error) => console.log(error))
     }
     if(parsedMsg.command == 'restart' || parsedMsg.command == 'start' || parsedMsg.command == 'stop' || parsedMsg.command == 'kill'){
         let authorised = checkPerms(message, parsedMsg, 'power')
-        powerCommand_Executor(message, parsedMsg, authorised)
+        powerCommand_Executor(message, parsedMsg, authorised).catch((error) => console.log(error))
     }
     if(parsedMsg.command == 'ping'){
         let authorised = true
-        pingCommand_Executor(message, parsedMsg, authorised)
+        pingCommand_Executor(message, parsedMsg, authorised).catch((error) => console.log(error))
     }
     if(parsedMsg.command == 'help'){
         let authorised = checkPerms(message,parsedMsg, 'help')
-        helpCommand_Executor(message, parsedMsg, authorised)
+        helpCommand_Executor(message, parsedMsg, authorised).catch((error) => console.log(error))
     }
+    suggestionCheck(message).catch((error) => console.log(error))
     /*
     if(parsedMsg.command == 'track'){
         let authorised = checkPerms(message, parsedMsg, 'tracker')

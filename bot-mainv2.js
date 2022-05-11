@@ -64,7 +64,7 @@ async function GetGuildMember(userID){
 
 async function onReady(){
     //set the status for swag reasons
-    bot.user.setActivity("mc.imakami.ml", { //depression noises
+    bot.user.setActivity("play.aegiscraft.net", { //depression noises
         type: "PLAYING",
       })
     //fetch and cache regularly used channels

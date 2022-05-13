@@ -89,6 +89,12 @@ async function onReady(){
         parsedState = parseCurrentState(currentState)
     }
     statusfetchSuccess = true
+
+    await bot.guilds.fetch(process.env.DISCORD_GID)
+    await bot.guilds.cache.get(process.env.DISCORD_GID).roles.fetch(process.env.DISCORD_MOD_ROLE).catch(error => console.log(error))
+    await bot.guilds.cache.get(process.env.DISCORD_GID).roles.fetch(process.env.SERVER_MOD_ROLE).catch(error => console.log(error))
+
+
     initendTimestamp = new Date().getTime()
     let startupTimeTaken =  initendTimestamp - startupTimestamp 
     let startupEmbed = new discord.MessageEmbed().setColor(0x0099ff).setTitle('Hello!')
@@ -244,7 +250,7 @@ async function suggestionCheck(message){
             message.react('<:accept:913689460087083028>').then(message.react('<:denied:913689460082892820>'))
             return true
         }
-        else if ((message.channel.id == process.env.SUGGESTION_CHANNEL_ID && message.content.toLowerCase().startsWith('[a]')) || CurrentGMember.roles.resolve(process.env.DISCORD_MOD_ROLE) || CurrentGMember.roles.resolve(process.env.SERVER_MOD_ROLE) || CurrentGMember.roles.resolve(process.env.BOTS)){
+        else if ((message.channel.id == process.env.SUGGESTION_CHANNEL_ID && message.content.toLowerCase().startsWith('[a]')) || message.member.roles.cache.has(process.env.DISCORD_MOD_ROLE) || message.member.roles.cache.has(process.env.SERVER_MOD_ROLE) || message.member.roles.cache.has(process.env.BOTS_ROLE)){
             return false
         }
          else if(message.channel.id == process.env.SUGGESTION_CHANNEL_ID){
@@ -261,6 +267,10 @@ async function suggestionCheck(message){
 
 //COugh I mean this is the message handler over here
 async function messageHandler(message){
+    if (message.author.id == bot.user.id)
+        return;
+
+
     let parsedMsg = parse(message,'~')
     
     if(parsedMsg.command == 'status'){

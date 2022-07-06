@@ -19,3 +19,4 @@ Adios, Mashiro!
 (This was a side project for a long time, but its time to move on)
 
 ```@ribcatcher#5378```
+🙂
